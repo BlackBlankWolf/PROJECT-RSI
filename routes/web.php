@@ -57,7 +57,7 @@ Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.sho
 // Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 
 Route::middleware('auth')->group(function () {
-    Route::post('/keranjang/store', [CartController::class, 'store'])->name('cart.store');
+    Route::post('/keranjang', [CartController::class, 'store'])->name('cart.store');
     Route::get('/keranjang', [CartController::class, 'index'])->name('cart.index');
     Route::post('/keranjang', [CartController::class, 'store'])->name('cart.store');
     Route::put('/keranjang/{id}', [CartController::class, 'update'])->name('cart.update');

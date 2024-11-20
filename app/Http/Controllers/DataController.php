@@ -18,7 +18,7 @@ class DataController extends Controller
     public function create(): Response
     {
         return Inertia::render('Auth/Login', [
-            'canResetPassword' => Route::has('password.request'),
+            // 'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
         ]);
     }
@@ -28,6 +28,10 @@ class DataController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+        ]);
         $request->authenticate();
 
         $request->session()->regenerate();

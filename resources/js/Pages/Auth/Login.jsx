@@ -22,7 +22,9 @@ export default function Login() {
 
             <div className="w-1/2 h-full flex flex-col p-20 justify-between">
                 <h1 className="text-4xl font-bold px-8">BitesWise</h1>
-                <p className="text-xl font-medium mt-2 px-8">                    Sign In to BitesWise
+                <p className="text-xl font-medium mt-2 px-8">
+                    {" "}
+                    Sign In to BitesWise
                 </p>
                 <form
                     className="w-full flex flex-col px-8 mt-5"
@@ -36,6 +38,7 @@ export default function Login() {
                         placeholder="Email"
                         className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none"
                         onChange={(e) => setData("email", e.target.value)}
+                        required
                     />
                     <input
                         id="password"
@@ -45,6 +48,7 @@ export default function Login() {
                         placeholder="Password"
                         className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none"
                         onChange={(e) => setData("password", e.target.value)}
+                        required
                     />
                     <div className="w-full flex flex-col pt-4">
                         <button
