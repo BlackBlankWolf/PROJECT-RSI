@@ -121,16 +121,13 @@ return Inertia::render('Keranjang', [
 
         // return redirect()->route('cart.index')->with('success', 'Produk berhasil ditambahkan ke keranjang.');
         try {
-            Cart::updateOrCreate(
-                [
-                    'user_id' =>$request->$userId,
-                    'product_id' => $request->product_id,
-                ],
-                [
-                    'kuantitas' => $request->kuantitas,
-                ]
-            );
-            return redirect()->route('keranjang')->with('success', 'Produk berhasil ditambahkan ke keranjang.');
+            Cart::create([
+                'product_id' => $request->product_id,
+                'user_id' => $userId,
+                'kuantitas' => $request->kuantitas,
+            ]);
+
+            return redirect()->route('index')->with('success', 'Produk berhasil ditambahkan ke keranjang.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

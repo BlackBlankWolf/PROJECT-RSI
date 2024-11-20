@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { FaEdit, FaEye, FaSave, FaTimes, FaCamera } from "react-icons/fa";
 import { Link, useForm, usePage } from "@inertiajs/react";
+import LogoutPopUp from "../Partials/LogoutPopUp";
+import { IoLogOutOutline } from "react-icons/io5";
 
 export default function ProfilePage() {
     const user = usePage().props.auth.user;
 
-    const { data, setData, patch, processing, recentlySuccessful } = useForm({
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        address: user.address,
-    });
-    
+    const { data, post, setData, patch, processing, recentlySuccessful } =
+        useForm({
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            address: user.address,
+        });
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -69,6 +71,22 @@ export default function ProfilePage() {
             };
             reader.readAsDataURL(file);
         }
+    };
+
+    const handleLogout = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const sureLogout = () => {
+        post(route("logout"));
+        closeModal();
+        // ini nanti sesuaikan kalo logout gmnh ia backend
     };
 
     // const submit = (e) => {
@@ -139,14 +157,13 @@ export default function ProfilePage() {
                         )}
                     </button>
                     <div>
-                        <Link
-                            href={route("logout")}
-                            method="post"
-                            className="mt-3 rounded-full bg-teal-500 text-white text-sm hover:bg-teal-700 px-4 py-1"
-                            as="button"
+                        <button
+                            className="mt-2 rounded-full bg-teal-500 text-white text-sm hover:bg-teal-700 px-4 py-1"
+                            onClick={handleLogout}
                         >
                             Log Out
-                        </Link>
+                            <IoLogOutOutline className="inline ml-2" />
+                        </button>
                     </div>
                 </div>
             </aside>
@@ -321,6 +338,14 @@ export default function ProfilePage() {
                         </>
                     )}
                 </form>
+
+                {isModalOpen && (
+                    <LogoutPopUp
+                        message="Apakah Anda yakin?"
+                        onClose={closeModal}
+                        onOut={sureLogout}
+                    />
+                )}
             </main>
         </div>
     );

@@ -130,6 +130,7 @@ export default function DetailProduk() {
         console.log(product.harga);
         console.log(product.berat);
         console.log(product.kalori);
+        console.log(quantity);
 
         // axios
         //     .post(route("cart.store"), {
@@ -142,36 +143,36 @@ export default function DetailProduk() {
         //     .catch((error) => {
         //         console.error("Gagal menambahkan produk:", error);
         //     });
-        // fetch(route("cart.store"), {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "X-CSRF-TOKEN": document
-        //             .querySelector('meta[name="csrf-token"]')
-        //             .getAttribute("content"),
-        //     },
-        //     body: JSON.stringify({
-        //         product_id: product.id,
-        //         kuantitas: quantity,
-        //     }),
-        // })
-        //     .then((response) => {
-        //         if (response.ok) {
-        //             alert("Produk berhasil ditambahkan ke keranjang!");
-        //         } else {
-        //             alert("Gagal menambahkan produk ke keranjang.");
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.error("Terjadi kesalahan:", error);
-        //     });
-
-        router.post(
-            route("cart.store", {
+        fetch(route("cart.store"), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+            body: JSON.stringify({
                 product_id: product.id,
                 kuantitas: quantity,
+            }),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("Produk berhasil ditambahkan ke keranjang! lalalala");
+                } else {
+                    alert("Gagal menambahkan produk ke keranjang.");
+                }
             })
-        );
+            .catch((error) => {
+                console.error("Terjadi kesalahan:", error);
+            });
+
+        // router.post(
+        //     route("cart.store", {
+        //         product_id: product.id,
+        //         kuantitas: quantity,
+        //     })
+        // );
     };
 
     return (
@@ -228,7 +229,7 @@ export default function DetailProduk() {
                                 <span
                                     className="mx-4 text-lg"
                                     onChange={(e) =>
-                                        setQuantity(e.target.value)
+                                        setQuantity("kuantitas", e.target.value)
                                     }
                                 >
                                     {quantity}
@@ -242,6 +243,7 @@ export default function DetailProduk() {
                                 </button>
                             </div>
                             <button
+                                type="submit"
                                 onClick={handleAddToCart}
                                 className="duration-300 hover:bg-gray-300 bg-gray-200 text-black px-4 py-2 rounded-full"
                                 method="POST"
