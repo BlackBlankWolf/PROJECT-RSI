@@ -64,7 +64,7 @@ class CartController extends Controller
     // ];
 
     $carts = Cart::with('product:id,nama_produk,harga')
-            // ->where('user_id', auth()->$userId) // Pastikan hanya untuk pengguna yang login
+            ->where('user_id', Auth::id()) // Pastikan hanya untuk pengguna yang login
             ->get()
             ->map(function ($cart) {
                 return [
@@ -121,7 +121,7 @@ return Inertia::render('Keranjang', [
 
         // return redirect()->route('cart.index')->with('success', 'Produk berhasil ditambahkan ke keranjang.');
         try {
-            $cart = Cart::updateOrCreate(
+            Cart::updateOrCreate(
                 [
                     'user_id' =>$request->$userId,
                     'product_id' => $request->product_id,
@@ -130,9 +130,8 @@ return Inertia::render('Keranjang', [
                     'kuantitas' => $request->kuantitas,
                 ]
             );
-            return redirect()->route('cart.index',$cart)->with('success', 'Produk berhasil ditambahkan ke keranjang.');
+            return redirect()->route('keranjang')->with('success', 'Produk berhasil ditambahkan ke keranjang.');
         } catch (\Exception $e) {
-            // dd($request->all());
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }

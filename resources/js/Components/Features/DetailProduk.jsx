@@ -104,7 +104,7 @@
 // // export default ProductDetail;
 
 import React, { useState } from "react";
-import { Link, router, usePage } from "@inertiajs/react";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
 import {
     FaArrowLeft,
     FaSearch,
@@ -124,7 +124,7 @@ export default function DetailProduk() {
         if (quantity > 1) setQuantity(quantity - 1);
     };
 
-    const handleAddToCart = (e) => {
+    const handleAddToCart = async (e) => {
         e.preventDefault();
         console.log(product.id);
         console.log(product.harga);
@@ -142,31 +142,36 @@ export default function DetailProduk() {
         //     .catch((error) => {
         //         console.error("Gagal menambahkan produk:", error);
         //     });
-        fetch(route("cart.store"), {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute("content"),
-            },
-            body: JSON.stringify({
+        // fetch(route("cart.store"), {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "X-CSRF-TOKEN": document
+        //             .querySelector('meta[name="csrf-token"]')
+        //             .getAttribute("content"),
+        //     },
+        //     body: JSON.stringify({
+        //         product_id: product.id,
+        //         kuantitas: quantity,
+        //     }),
+        // })
+        //     .then((response) => {
+        //         if (response.ok) {
+        //             alert("Produk berhasil ditambahkan ke keranjang!");
+        //         } else {
+        //             alert("Gagal menambahkan produk ke keranjang.");
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.error("Terjadi kesalahan:", error);
+        //     });
+
+        router.post(
+            route("cart.store", {
                 product_id: product.id,
                 kuantitas: quantity,
-            }),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    alert("Produk berhasil ditambahkan ke keranjang!");
-                } else {
-                    alert("Gagal menambahkan produk ke keranjang.");
-                }
             })
-            .catch((error) => {
-                console.error("Terjadi kesalahan:", error);
-            });
-
-        // router.post(route("cart.store", product));
+        );
     };
 
     return (
@@ -210,33 +215,42 @@ export default function DetailProduk() {
                     </p>
 
                     {/* Form Tambah ke Keranjang */}
-                    <div className="flex justify-between items-center mt-6">
-                        <div className="flex items-center">
+                    <form onSubmit={handleAddToCart}>
+                        <div className="flex justify-between items-center mt-6">
+                            <div className="flex items-center">
+                                <button
+                                    type="button"
+                                    onClick={decrementQuantity}
+                                    className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"
+                                >
+                                    <FaMinus />
+                                </button>
+                                <span
+                                    className="mx-4 text-lg"
+                                    onChange={(e) =>
+                                        setQuantity(e.target.value)
+                                    }
+                                >
+                                    {quantity}
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={incrementQuantity}
+                                    className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"
+                                >
+                                    <FaPlus />
+                                </button>
+                            </div>
                             <button
-                                type="button"
-                                onClick={decrementQuantity}
-                                className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"
+                                onClick={handleAddToCart}
+                                className="duration-300 hover:bg-gray-300 bg-gray-200 text-black px-4 py-2 rounded-full"
+                                method="POST"
+                                // disabled={processing}
                             >
-                                <FaMinus />
-                            </button>
-                            <span className="mx-4 text-lg">{quantity}</span>
-                            <button
-                                type="button"
-                                onClick={incrementQuantity}
-                                className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"
-                            >
-                                <FaPlus />
+                                Tambahkan ke keranjang
                             </button>
                         </div>
-                        <button
-                            onClick={handleAddToCart}
-                            className="duration-300 hover:bg-gray-300 bg-gray-200 text-black px-4 py-2 rounded-full"
-                            method="POST"
-                            // disabled={processing}
-                        >
-                            Tambahkan ke keranjang
-                        </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
